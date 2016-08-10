@@ -1,0 +1,7 @@
+[package]
+name = "acled"
+version = "0.1.0"
+authors = ["Michael Van Wickle <vanwickle.m@husky.neu.edu>"]
+
+[dependencies]
+csv = "0.14.7"
