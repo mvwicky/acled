@@ -29,4 +29,3 @@ Author: Michael Van Wickle
 - `SOURCE`
 - `NOTES`
 - `FATALITIES`
-
