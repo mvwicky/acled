@@ -5,3 +5,5 @@ authors = ["Michael Van Wickle <vanwickle.m@husky.neu.edu>"]
 
 [dependencies]
 csv = "0.14.7"
+postgres = "0.11.10"
+nickel = "*"
