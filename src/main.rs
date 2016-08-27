@@ -1,6 +1,10 @@
 extern crate csv;
+#[macro_use] extern crate nickel;
 
 use std::env;
+use std::collections::HashMap;
+
+use nickel::{Nickel, HttpRouter};
 
 fn main() {
 	let mut p = env::current_dir().unwrap();
@@ -26,6 +30,19 @@ fn main() {
         if fat >= 1 {
               cnt += 1;
         }
+        break;
 	}
     println!("Incidents with more than one fatality: {}", cnt);
+
+    let mut server = Nickel::new();
+
+  	let pat = p.to_str().unwrap();
+    server.get("/", middleware! { |_, response| 
+    	let mut data = HashMap::new();
+    	data.insert("name", "User");
+    	data.insert("path", &pat)
+    	return response.render("views/main.tpl", &data);
+    });
+
+    server.listen("127.0.0.1:6767");
 }
