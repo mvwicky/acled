@@ -29,3 +29,7 @@ Author: Michael Van Wickle
 - `SOURCE`
 - `NOTES`
 - `FATALITIES`
+
+# Africa Map Dimensions
+- Width: 1239
+- Height: 1215
