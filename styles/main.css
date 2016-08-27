@@ -1,0 +1,15 @@
+body {
+  border: 1px solid black;
+  margin: 5px 5em;
+  /* vertical | horizontal */
+  padding: 0.1em 1.0em;
+  /* vertical | horizontal */
+  vertical-align: center; }
+
+.map {
+  border: 1px solid black;
+  display: block;
+  margin: auto;
+  width: 40%; }
+
+/*# sourceMappingURL=main.css.map */

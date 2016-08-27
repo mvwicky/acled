@@ -31,5 +31,5 @@ Author: Michael Van Wickle
 - `FATALITIES`
 
 # Africa Map Dimensions
-- Width: 1239
+- Width: 1249
 - Height: 1215

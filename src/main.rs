@@ -4,11 +4,12 @@ extern crate csv;
 use std::env;
 use std::collections::HashMap;
 
-use nickel::{Nickel, HttpRouter};
+use nickel::{Nickel, HttpRouter, StaticFilesHandler};
 
 fn main() {
 	let mut p = env::current_dir().unwrap();
 	p.push("data");
+	p.push("csv");
 	p.push("ACLED_Data_clean.csv");
 	println!("{}", p.display());
 	println!("{}", p.is_file());
@@ -36,11 +37,15 @@ fn main() {
 
     let mut server = Nickel::new();
 
-  	let pat = p.to_str().unwrap();
+    server.utilize(StaticFilesHandler::new("images/"));
+    server.utilize(StaticFilesHandler::new("src/dart"));
+    server.utilize(StaticFilesHandler::new("styles/"));
+
     server.get("/", middleware! { |_, response| 
     	let mut data = HashMap::new();
+
     	data.insert("name", "User");
-    	data.insert("path", &pat)
+    	
     	return response.render("views/main.tpl", &data);
     });
 

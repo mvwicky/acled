@@ -1,3 +1,17 @@
-html {
-	
+$verti: 5px;
+$horiz: 5em;
+$ncols: 2;
+
+body {
+	border: 1px solid rgba(0, 0, 0, 100);
+	margin: $verti $horiz; /* vertical | horizontal */
+	padding: 0.1em 1.0em; /* vertical | horizontal */
+    vertical-align: center;
+}
+
+.map {
+    border: 1px solid black;
+    display: block;
+    margin: auto;
+    width: 40%;
 }

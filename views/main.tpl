@@ -1,10 +1,12 @@
 <html>
 	<head>
 		<title>ACLED</title>
+		<script defer src="main.dart" type="application/dart"></script>
+		<script defer src="packages/browser/dart.js"></script>
+		<link rel="stylesheet" type="text/css" href="main.css">
 	</head>
 	<body>
-		<h1>{{ name }}</h1>
 		<br />
-		<img src="africa_map.jpg" />
+		<img class="map" src="africa_map_md.png">
 	</body>
 </html>
