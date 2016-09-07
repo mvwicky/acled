@@ -5,3 +5,30 @@
 # Remove Cargo.lock from gitignore if creating an executable, leave it for libraries
 # More information here http://doc.crates.io/guide.html#cargotoml-vs-cargolock
 Cargo.lock
+
+# sass
+.sass-cache/
+*.css.map
+
+# python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# dart
+.buildlog
+.packages
+.project
+.pub/
+build/
+**/packages/
+
+*.dart.js
+*.part.js
+*.js.deps
+*.js.map
+*.info.json
+
+doc/api/
+
+pubspec.lock

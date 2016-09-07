@@ -3,6 +3,7 @@ import sys
 
 from PIL import Image
 
+
 if __name__ == '__main__':
     af_map = os.path.realpath('images/africa_map.jpg')
     print(af_map)
