@@ -6,23 +6,30 @@ extern crate rustc_serialize;
 use std::env;
 use std::collections::HashMap;
 
-use nickel::{Nickel, HttpRouter, StaticFilesHandler};
+use nickel::{Nickel, HttpRouter, Mountable, StaticFilesHandler};
 
 
 #[derive(Debug, Clone, RustcEncodable)]
 struct Country {
+    link: String,
     name: String,
     num_events: i32,
     num_fatalities: i32,
 }
 impl Country {
-    fn new(n: String, num_eve: i32, num_fat: i32) -> Country {
+    fn new(l: String, n: String, num_eve: i32, num_fat: i32) -> Country {
         Country {
+            link: l,
             name: n,
             num_events: num_eve,
             num_fatalities: num_fat,
         }
     }
+}
+
+#[derive(Debug, Clone, RustcEncodable)]
+struct MainPageData {
+    countries: Vec<Country>,
 }
 
 #[derive(Debug, Clone, RustcEncodable)]
@@ -43,6 +50,19 @@ impl CountryPageData {
     }
 }
 
+fn contains_name(inp_vec: &Vec<Country>, inp_name: String) -> bool {
+    if inp_vec.is_empty() || inp_name.is_empty() {
+        false
+    }
+    else {
+        for elem in inp_vec {
+            if elem.name == inp_name {
+                return true;
+            }
+        }
+        false
+    }
+}
 
 fn main() {
 	let mut p = env::current_dir().unwrap();
@@ -60,83 +80,70 @@ fn main() {
 	let mut rdr = csv::Reader::from_file(p.as_path()).unwrap();
 	
 	println!("HEADERS");
-	println!("{:?}", rdr.headers().unwrap());
+    for head in rdr.headers().unwrap() {
+        println!("{:?}", head);
+    }
 	println!("");
 
-    let mut fatality_count = 0;
-    let mut country_vec: Vec<String> = Vec::new();
-    let mut country_str: Vec<Country> = Vec::new();
-    let mut ind = 0;
+    
+    let country_index: usize = 14;
+    let fatality_index: usize = 24;
+
+    let mut country_vec: Vec<Country> = Vec::new();
+    let mut ind: usize = 0;
 	for row in rdr.records() {
         let row = row.unwrap();
 
-        let fatalities = row[24].parse::<i32>().unwrap();
-        if fatalities > 0 {
-            fatality_count += 1;
+        let fatalities = row[fatality_index].parse::<i32>().unwrap();
+        let country = row[country_index].parse::<String>().unwrap();
+        
+        if country_vec.is_empty() {
+            let link = country.replace(" ", "");
+            let n_ctry = Country::new(link, country.clone(), 1, fatalities);
+            country_vec.push(n_ctry.clone());
         }
-
-        let country = row[14].parse::<String>().unwrap();
-        if !country_vec.contains(&country) {
-            country_vec.push(country.clone());
-            ind = country_vec.len() - 1;
-            let n_ctry = Country::new(country.clone(), 0, 0);
-            country_str.push(n_ctry.clone());
+        if !contains_name(&country_vec, country.clone()) {
+            let link = country.replace(" ", "");
+            let n_ctry = Country::new(link, country.clone(), 1, fatalities);
+            country_vec.push(n_ctry.clone());
+            ind += 1;
         }
-        
-        country_str[ind].num_fatalities += fatalities;
-        country_str[ind].num_events += 1;
-        
-        
+        else {
+            country_vec[ind].num_events += 1;
+            country_vec[ind].num_fatalities += fatalities;
+        }
 	}
-    println!("Incidents with more than one fatality: {}", fatality_count);
-    println!("{:?}", country_str);
+    println!("{:?}", country_vec);
 
     let mut server = Nickel::new();
 
-    server.utilize(StaticFilesHandler::new("images/"));
-    server.utilize(StaticFilesHandler::new("src/dart"));
-    server.utilize(StaticFilesHandler::new("styles/"));
-
+    server.mount("/static/styles/", StaticFilesHandler::new("styles/"));
+    server.mount("/static/images/", StaticFilesHandler::new("images/"));
+    server.mount("/dart/", StaticFilesHandler::new("src/dart"));
+   
+    let c_vec = country_vec.clone();
+    // Main Page
     server.get("/", middleware! { |_, response| 
-    	let mut data = HashMap::new();
         // let c_vec = country_vec.clone();
-        let c_vec = country_str.clone();
-        let mut countries: Vec<HashMap<String, String>> = Vec::new();
-        for ctry in c_vec {
-            let mut c_map: HashMap<String, String> = HashMap::new();
-            
-            //let fatalities = country_map[&ctry].clone().to_string();
-            
-            //c_map.insert("name".to_string(), ctry);
-            //c_map.insert("fatalities".to_string(), fatalities);
-
-            c_map.insert("name".to_string(), ctry.name.clone());
-            c_map.insert("fatalities".to_string(), ctry.num_fatalities.clone().to_string());
-            c_map.insert("events".to_string(), ctry.num_events.clone().to_string());
-            countries.push(c_map);
-        }
-        data.insert("countries", countries);
-    
-        let mut title_vec: Vec<HashMap<String, String>> = Vec::new();
-        let mut title_map: HashMap<String, String> = HashMap::new();
-        title_map.insert("t_string".to_string(), "ACLED".to_string());
-        title_vec.push(title_map);
-        data.insert("title", title_vec);
-        println!("{:?}", data);	
-    	return response.render("views/main.tpl", &data);
+        let main_page = MainPageData { countries: c_vec.clone() }; 
+    	return response.render("views/main.tpl", &main_page);
     });
 
     server.get("/country/:country_name", middleware! { |request, response| 
-        let mut data = HashMap::new();
         let c_name = request.param("country_name").unwrap();
         println!("{}", c_name);
-        if !country_vec.contains(&c_name.to_string()) {
-            data.insert("found", "");
-            return response.render("views/country.tpl", &data);
+        if !contains_name(&country_vec, c_name.to_string()) {
+            let c_struct = CountryPageData {
+                found: false,
+                name: "Not Found".to_string(),
+                events: 0,
+                fatalities:0
+            };
+            return response.render("views/country.tpl", &c_struct);
         }
         else {
             let c_struct = CountryPageData { 
-                found: false,
+                found: true,
                 name: c_name.to_string(),
                 events: 0,
                 fatalities: 0

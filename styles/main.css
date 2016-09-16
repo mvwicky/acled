@@ -12,4 +12,11 @@ body {
   margin: auto;
   width: 40%; }
 
+table#indiv_ctry {
+  font: 100% sans-serif;
+  border: 1px solid black;
+  background-color: #c8c8c8; }
+  table#indiv_ctry th, table#indiv_ctry td {
+    border: 1px solid black; }
+
 /*# sourceMappingURL=main.css.map */

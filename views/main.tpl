@@ -1,20 +1,19 @@
 <html>
 	<head>
 		<title>ACLED</title>
-		<script defer src="main.dart" type="application/dart"></script>
+		<script defer src="/dart/main.dart" type="application/dart"></script>
 		<script defer src="packages/browser/dart.js"></script>
-		<link rel="stylesheet" type="text/css" href="main.css">
+		<link rel="stylesheet" type="text/css" href="/static/styles/main.css">
 	</head>
 	<body>
-        {{#title}}
-           <h1> {{t_string}} </h1>
-        {{/title}}
+        <h1>ACELD.rs</h1>
 		<br />
-		<!-- <img class="map" src="africa_map_md.png"> -->
+		<!-- <img class="map" src="/static/images/africa_map_md.png"> -->
       
         <h3> Country List </h3>
         {{#countries}}
-           <b><a href="country/{{ name }}">{{ name }}</a></b> - {{ fatalities }} - {{ events }}<br />
+           <!--<b><a href="country/{{ link }}">{{ name }}</a></b> - {{ num_fatalities }} - {{ num_events }}<br />-->
+           <b><a href="country/{{ link }}">{{ name }}</a></b><br />
         {{/countries}}
 	</body>
 </html>
