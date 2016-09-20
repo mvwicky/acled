@@ -64,6 +64,20 @@ fn contains_name(inp_vec: &Vec<Country>, inp_name: String) -> bool {
     }
 }
 
+fn get_country_by_name(inp_vec: &Vec<Country>, inp_name: String) -> Option<Country> {
+	if inp_vec.is_empty() || inp_name.is_empty() {
+		None
+	}
+	else {
+		for elem in inp_vec {
+			if elem.name == inp_name {
+				return Some(elem);
+			}
+		}
+		None
+	}
+}
+
 fn main() {
 	let mut p = env::current_dir().unwrap();
 	p.push("data");
@@ -124,7 +138,6 @@ fn main() {
     let c_vec = country_vec.clone();
     // Main Page
     server.get("/", middleware! { |_, response| 
-        // let c_vec = country_vec.clone();
         let main_page = MainPageData { countries: c_vec.clone() }; 
     	return response.render("views/main.tpl", &main_page);
     });
