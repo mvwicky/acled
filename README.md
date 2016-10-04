@@ -1,6 +1,3 @@
-Title: ACLED.rs Readme
-Author: Michael Van Wickle
-
 # ACLED.rs
 
 ## Headers
