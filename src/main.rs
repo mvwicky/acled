@@ -1,6 +1,7 @@
 extern crate csv;
 #[macro_use] extern crate nickel;
 extern crate rustc_serialize;
+extern crate data_structs;
 
 
 use std::env;
@@ -8,6 +9,7 @@ use std::collections::HashMap;
 
 use nickel::{Nickel, HttpRouter, Mountable, StaticFilesHandler};
 
+use data_structs::Country;
 
 #[derive(Debug, Clone, RustcEncodable)]
 struct Country {
