@@ -52,9 +52,11 @@ pub struct MainPageData {
 }
 
 impl Event {
-    pub fn from_row(row: Vec<String>) -> Event {
-        
+    pub fn from_row(row: Vec<String>) -> Option<Event> {
+        let date_str: String = row[3].parse()::<String>().unwrap();
+        let t_date: NaiveDate = NaiveDate::parse_from_str(&date_str, "%d/%m/%Y").unwrap();
     }
+    
 }
 
 impl Country {
