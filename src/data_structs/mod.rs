@@ -1,9 +1,34 @@
+use chrono::NaiveDate;
+
 #[derive(Debug, Clone, RustcDecodable, RustcEncodable)]
 pub struct Event {
-   gwno: String,
-   event_id_cnty: String,
-   event_id_no_cnty: String,
+   pub gwno: String,
+   pub event_id_cnty: String,
+   pub event_id_no_cnty: String,
+   pub event_date: NaiveDate,
+   pub year: i32,
+   pub time_precision: i32,
+   pub event_type: String,
+   pub actor_1: String,
+   pub ally_actor_1: String,
+   pub inter_1: String,
+   pub actor_2: String,
+   pub ally_actor_2: String,
+   pub inter_2: String,
+   pub interaction: String,
+   pub country: String,
+   pub admin_1: String,
+   pub admin_2: String,
+   pub admin_3: String,
+   pub location: String,
+   pub latitude: f32,
+   pub longitude: f32,
+   pub geo_precision: i32,
+   pub source: String,
+   pub notes: String,
+   pub fatalities: i32,
 }
+
 
 #[derive(Debug, Clone, RustcEncodable)]
 pub struct Country {
@@ -24,6 +49,12 @@ pub struct CountryPageData {
 #[derive(Debug, Clone, RustcEncodable)]
 pub struct MainPageData {
     pub countries: Vec<Country>,
+}
+
+impl Event {
+    pub fn from_row(row: Vec<String>) -> Event {
+        
+    }
 }
 
 impl Country {

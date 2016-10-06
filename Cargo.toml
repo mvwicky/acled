@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = ["Michael Van Wickle <vanwickle.m@husky.neu.edu>"]
 
 [dependencies]
+chrono = { version = "0.2.25", features = ["rustc-serialize"] }
 csv = "0.14.7"
 nickel = "*"
 rustc-serialize = "0.3.19"

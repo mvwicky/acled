@@ -1,3 +1,4 @@
+extern crate chrono;
 extern crate csv;
 #[macro_use] extern crate nickel;
 extern crate rustc_serialize;
