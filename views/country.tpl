@@ -28,6 +28,25 @@
                     <tr>    
                 </tbody>
             </table>
+            {{#years}}
+            <br />
+            <table>
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th># of Events</th>
+                        <th># of Fatalities</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ year }}</td>
+                        <td>{{ eve }}</td>
+                        <td>{{ fat }}</td>
+                    <tr>
+                </tbody>
+            </table>
+            {{/years}}
         {{/found}}
 
         {{^found}}

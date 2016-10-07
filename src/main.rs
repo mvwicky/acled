@@ -118,6 +118,7 @@ fn main() {
     server.mount("/static/styles/", StaticFilesHandler::new("styles/"));
     server.mount("/static/images/", StaticFilesHandler::new("images/"));
     server.mount("/dart/", StaticFilesHandler::new("src/dart"));
+    server.mount("/js/", StaticFilesHandler::new("src/js"));
    
     let c_vec = country_vec.clone();
     // Main Page
@@ -125,7 +126,7 @@ fn main() {
         let main_page = MainPageData { countries: c_vec.clone() }; 
     	return response.render("views/main.tpl", &main_page);
     });
-
+    // Page for a country
     server.get("/country/:country_link", middleware! { |request, response| 
         let c_link = request.param("country_link").unwrap();
         let ctry = get_country_by_link(&country_vec, c_link.to_string());

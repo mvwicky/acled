@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "outFile": "src/js/main.js",
+        "sourceMap": true
+    },
+    "include": [
+        "src/ts/main.ts"
+    ]
+}
