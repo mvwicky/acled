@@ -11,8 +11,19 @@
 		<!-- <img class="map" src="/static/images/africa_map_md.png"> -->
       
         <h3> Country List </h3>
-        {{#countries}}
-           <b><a href="country/{{ link }}">{{ name }}</a></b><br />
-        {{/countries}}
+        <table class="acled-main">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+            {{#countries}}
+            <tr>
+                <td><b><a href="country/{{ link }}">{{ name }}</a></b></td>
+            </tr>
+            {{/countries}}
+            </tbody>
+        </table>
 	</body>
 </html>

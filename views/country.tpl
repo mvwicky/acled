@@ -6,47 +6,32 @@
 		<link rel="stylesheet" type="text/css" href="/static/styles/main.css">
 	</head>
 	<body>
+        <h1>ACLED.rs</h1>
+        <br />
         {{#found}}
-            <h2>{{ name }} Stats</h2><br />
-            <table id="indiv_ctry">
-                <thead>
-                   <tr>
-                        <th>Name</th>
-                        <th># of Events</th>
-                        <th># of Fatalities</th>
-                        <!-- 
-                        <th>Avg. Events/Year</th>
-                        <th>Avg. Fatalities/Event</th>
-                        -->
-                   </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ name }}</td>
-                        <td>{{ events }}</td>
-                        <td>{{ fatalities }}</td>
-                    <tr>    
-                </tbody>
-            </table>
-            {{#years}}
-            <br />
-            <table>
-                <thead>
-                    <tr>
-                        <th>Year</th>
-                        <th># of Events</th>
-                        <th># of Fatalities</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ year }}</td>
-                        <td>{{ eve }}</td>
-                        <td>{{ fat }}</td>
-                    <tr>
-                </tbody>
-            </table>
-            {{/years}}
+        <h2>{{name}}</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Events</th>
+                    <th>Fatalities</th>
+                    <th>Events/Day</th>
+                    <th>Fatalities/Event</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#years}}
+                <tr>
+                    <td><a href="/{{year}}">{{ year }}</a></td>
+                    <td>{{ events }}</td>
+                    <td>{{ fatalities }}</td>
+                    <td>{{ epd }}</td>
+                    <td>{{ fpe }}</td>
+                <tr>
+                {{/years}}
+            </tbody>
+        </table>
         {{/found}}
 
         {{^found}}

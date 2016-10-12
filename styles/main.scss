@@ -1,6 +1,36 @@
+@import "base";
+
 $verti: 5px;
 $horiz: 5em;
 $ncols: 2;
+
+$header-col: rgb(150, 150, 225);
+$dark-cell: rgb(180, 180, 220);
+$light-cell: rgb(210, 210, 225);
+
+
+* {
+    font-family: sans-serif;
+}
+
+th {
+    background-color: $header-col;
+    border: 0.5px solid rgb(100, 100, 255);
+    @include border-radius(2px);
+    padding: 2px;
+}
+
+tr:nth-child(2n+1) {
+    background-color: $light-cell;
+}
+
+tr:nth-child(2n+0) {
+    background-color: $dark-cell;
+}
+
+.acled-main {
+    border: 1px solid black;
+} 
 
 body {
 	border: 1px solid rgba(0, 0, 0, 100);

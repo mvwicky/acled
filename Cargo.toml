@@ -8,4 +8,4 @@ chrono = { version = "0.2.25", features = ["rustc-serialize"] }
 csv = "0.14.7"
 nickel = "*"
 rustc-serialize = "0.3.19"
-postgres = "0.11"
+postgres = "0.12"
