@@ -1,3 +1,5 @@
+use std::collections::{HashMap, BTreeMap};
+
 use chrono::NaiveDate;
 
 #[derive(Debug, Clone, RustcDecodable, RustcEncodable)]
@@ -112,7 +114,23 @@ impl Country {
         }
     }
     pub fn to_page_data(&self) -> CountryPageData {
-        let t_years: Vec<Years> = Vec::new();
+        let mut t_years: BTreeMap<i32, Year> = BTreeMap::new(); 
+        for event in &self.events {
+            let c_year = t_years.entry(event.year).or_insert(Year::new(event.year));
+            c_year.eve += 1;
+            c_year.fat += event.fatalities;
+        }
+        let mut year_vec: Vec<Year> = Vec::new();
+        for elem in t_years.values(){
+            year_vec.push(elem.clone());
+        }
+        CountryPageData {
+            found: true,
+            name: self.name.clone(),
+            events: self.num_events.clone(),
+            fatalities: self.num_fatalities.clone(),
+            years: year_vec,
+        }
         
     }
 }
@@ -125,6 +143,16 @@ impl CountryPageData {
             events: eve,
             fatalities: fat,
             years: Vec::new(),
+        }
+    }
+}
+
+impl Year {
+    pub fn new(t_year: i32) -> Year {
+        Year {
+            year: t_year,
+            eve: 0,
+            fat: 0,
         }
     }
 }

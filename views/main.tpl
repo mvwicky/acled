@@ -12,7 +12,6 @@
       
         <h3> Country List </h3>
         {{#countries}}
-           <!--<b><a href="country/{{ link }}">{{ name }}</a></b> - {{ num_fatalities }} - {{ num_events }}<br />-->
            <b><a href="country/{{ link }}">{{ name }}</a></b><br />
         {{/countries}}
 	</body>
