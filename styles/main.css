@@ -23,7 +23,7 @@ body {
   border: 1px solid black;
   margin: 5px 5em;
   /* vertical | horizontal */
-  padding: 0.1em 1.0em;
+  padding: 1.0em 1.0em;
   /* vertical | horizontal */
   vertical-align: center; }
 

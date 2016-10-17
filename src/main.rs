@@ -16,6 +16,7 @@ use acled::data_structs::{Event, EventTrunc, Country, CountryPageData, MainPageD
                           CountryNameLink};
 
 use postgres::{Connection, TlsMode};
+use postgres::types::ToSql;
 
 
 fn contains_name(inp_vec: &Vec<Country>, inp_name: String) -> bool {
@@ -124,8 +125,24 @@ fn main() {
                       ($1, $2, $3, $4,$5, $6, $7, $8,$9, $10, $11, $12,$13, $14, $15, $16,$17)")
             .unwrap();
 
-    let get_event_trunc_country = 
-        conn.prepare("SELECT * FROM event_trunc WHERE country = $1").unwrap();
+    let get_event_trunc_country = conn.prepare("SELECT * FROM event_trunc WHERE country = $1")
+        .unwrap();
+
+    let get_event_trunc_country_year =
+        conn.prepare("SELECT * FROM event_trunc WHERE country = $1 AND year = $2").unwrap();
+
+    let mut i = 0;
+    for ret_row in &get_event_trunc_country.query(&[&"Somalia"]).unwrap() {
+        i += 1;
+    }
+    println!("{}", i);
+
+    let mut j = 0;
+    for ret_row in &get_event_trunc_country_year.query(&[&"Somalia", &2015]).unwrap() {
+        j += 1;
+    }
+    println!("{}", j);
+    std::process::exit(0);
 
     let mut rows_aff = 0;
     for row in rdr.records() {
@@ -168,14 +185,9 @@ fn main() {
 
         last_country = Some(country.clone());
 
-        if country_vec.is_empty() {
+        if country_vec.is_empty() || !contains_name(&country_vec, country.clone()) {
             let link = country.replace(" ", "");
-            let n_ctry = Country::new(link, country.clone(), 1, fatalities);
-            country_vec.push(n_ctry.clone());
-        }
-        if !contains_name(&country_vec, country.clone()) {
-            let link = country.replace(" ", "");
-            let n_ctry = Country::new(link, country.clone(), 1, fatalities);
+            let n_ctry = Country::new(link, country.clone(), 0, 0);
             country_vec.push(n_ctry.clone());
         }
         let ind = country_vec.len() - 1;

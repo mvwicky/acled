@@ -3,6 +3,8 @@ use std::f64;
 
 use chrono::NaiveDate;
 
+use postgres::{Connection};
+
 #[derive(Debug, Clone, RustcDecodable, RustcEncodable)]
 pub struct Event {
     pub gwno: String,
@@ -234,7 +236,7 @@ impl Country {
 }
 
 impl CountryPageData {
-    pub fn new(t_name: String, eve: i32, fat: i32) -> CountryPageData {
+    pub fn new(t_name: String) -> CountryPageData {
         CountryPageData {
             found: true,
             name: t_name,
