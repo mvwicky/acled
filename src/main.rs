@@ -142,14 +142,13 @@ fn main() {
         j += 1;
     }
     println!("{}", j);
-    std::process::exit(0);
 
     let mut rows_aff = 0;
     for row in rdr.records() {
         tot_eve += 1;
         let row = row.unwrap();
 
-        let e_t = EventTrunc::from_row(&row);
+        let e_t = EventTrunc::from_csv_row(&row);
         if cur_rows == 0 {
             let r = add_event_trunc.execute(&[&e_t.event_date,
                            &e_t.year,
@@ -193,7 +192,7 @@ fn main() {
         let ind = country_vec.len() - 1;
         country_vec[ind].num_events += 1;
         country_vec[ind].num_fatalities += fatalities;
-        country_vec[ind].events.push(Event::from_row(&row));
+        country_vec[ind].events.push(Event::from_csv_row(&row));
     }
     println!("Rows Affected: {}", rows_aff);
     println!("Total Events: {}", tot_eve);

@@ -103,7 +103,7 @@ pub struct Year {
 
 
 impl Event {
-    pub fn from_row(row: &Vec<String>) -> Event {
+    pub fn from_csv_row(row: &Vec<String>) -> Event {
         let date_str: String = row[3].parse::<String>().unwrap();
         let t_date: NaiveDate = NaiveDate::parse_from_str(&date_str, "%d/%m/%Y").unwrap();
         let t_year: i32 = row[4].parse::<i32>().unwrap();
@@ -164,7 +164,7 @@ impl EventTrunc {
             fatalities: event.fatalities.clone(),
         }
     }
-    pub fn from_row(row: &Vec<String>) -> EventTrunc {
+    pub fn from_csv_row(row: &Vec<String>) -> EventTrunc {
         let date_str: String = row[3].parse::<String>().unwrap().trim().to_string();
         let t_date: NaiveDate = NaiveDate::parse_from_str(&date_str, "%d/%m/%Y").unwrap();
         let t_year: i32 = row[4].parse::<i32>().unwrap();
