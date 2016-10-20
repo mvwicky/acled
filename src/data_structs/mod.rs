@@ -5,6 +5,35 @@ use chrono::NaiveDate;
 
 use postgres::{Connection};
 
+
+enum Field {
+    gwno,
+    event_id_cnty,
+    event_id_no_cnty,
+    event_date,
+    year,
+    time_precision,
+    event_type,
+    actor_1,
+    ally_actor_1,
+    inter_1,
+    actor_2,
+    ally_actor_2,
+    inter_2,
+    interaction,
+    country,
+    admin_1,
+    admin_2,
+    admin_3,
+    location,
+    latitude,
+    longitude,
+    geo_precision,
+    source,
+    notes,
+    fatalities,
+}
+
 #[derive(Debug, Clone, RustcDecodable, RustcEncodable)]
 pub struct Event {
     pub gwno: String,
