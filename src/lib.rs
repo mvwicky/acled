@@ -3,3 +3,4 @@ extern crate rustc_serialize;
 extern crate postgres;
 
 pub mod data_structs;
+pub mod country;

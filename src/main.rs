@@ -19,6 +19,7 @@ use postgres::{Connection, TlsMode};
 use postgres::types::ToSql;
 
 
+
 fn contains_name(inp_vec: &Vec<Country>, inp_name: String) -> bool {
     if inp_vec.is_empty() || inp_name.is_empty() {
         false
