@@ -7,31 +7,31 @@ use postgres::{Connection};
 
 
 enum Field {
-    gwno,
-    event_id_cnty,
-    event_id_no_cnty,
-    event_date,
-    year,
-    time_precision,
-    event_type,
-    actor_1,
-    ally_actor_1,
-    inter_1,
-    actor_2,
-    ally_actor_2,
-    inter_2,
-    interaction,
-    country,
-    admin_1,
-    admin_2,
-    admin_3,
-    location,
-    latitude,
-    longitude,
-    geo_precision,
-    source,
-    notes,
-    fatalities,
+    Gwno,
+    EventIdCnty,
+    EventIdNoCnty,
+    EventDate,
+    Year,
+    TimePrecision,
+    EventType,
+    Actor1,
+    AllyActor1,
+    Inter1,
+    Actor2,
+    AllyActor2,
+    Inter2,
+    Interaction,
+    Country,
+    Admin1,
+    Admin2,
+    Admin3,
+    Location,
+    Latitude,
+    Longitude,
+    GeoPrecision,
+    Source,
+    Notes,
+    Fatalities,
 }
 
 #[derive(Debug, Clone, RustcDecodable, RustcEncodable)]
@@ -133,39 +133,39 @@ pub struct Year {
 
 impl Event {
     pub fn from_csv_row(row: &Vec<String>) -> Event {
-        let date_str: String = row[3].parse::<String>().unwrap();
+        let date_str: String = row[Field::EventDate as usize].parse::<String>().unwrap().trim().to_string();
         let t_date: NaiveDate = NaiveDate::parse_from_str(&date_str, "%d/%m/%Y").unwrap();
-        let t_year: i32 = row[4].parse::<i32>().unwrap();
-        let t_tpres: i32 = row[5].parse::<i32>().unwrap();
-        let t_lat: f64 = row[19].parse::<f64>().unwrap();
-        let t_lon: f64 = row[20].parse::<f64>().unwrap();
-        let t_gpres: i32 = row[21].parse::<i32>().unwrap();
-        let t_fat: i32 = row[24].parse::<i32>().unwrap();
+        let t_year: i32 = row[Field::Year as usize].parse::<i32>().unwrap();
+        let t_tpres: i32 = row[Field::TimePrecision as usize].parse::<i32>().unwrap();
+        let t_lat: f64 = row[Field::Latitude as usize].parse::<f64>().unwrap();
+        let t_lon: f64 = row[Field::Longitude as usize].parse::<f64>().unwrap();
+        let t_gpres: i32 = row[Field::GeoPrecision as usize].parse::<i32>().unwrap();
+        let t_fat: i32 = row[Field::Fatalities as usize].parse::<i32>().unwrap();
         Event {
-            gwno: row[0].clone(),
-            event_id_cnty: row[1].clone(),
-            event_id_no_cnty: row[2].clone(),
+            gwno: row[Field::Gwno as usize].clone().trim().to_string(),
+            event_id_cnty: row[Field::EventIdCnty as usize].clone().trim().to_string(),
+            event_id_no_cnty: row[Field::EventIdNoCnty as usize].clone().trim().to_string(),
             event_date: t_date,
             year: t_year,
             time_precision: t_tpres,
-            event_type: row[6].clone(),
-            actor_1: row[7].clone(),
-            ally_actor_1: row[8].clone(),
-            inter_1: row[9].clone(),
-            actor_2: row[10].clone(),
-            ally_actor_2: row[11].clone(),
-            inter_2: row[12].clone(),
-            interaction: row[13].clone(),
-            country: row[14].clone(),
-            admin_1: row[15].clone(),
-            admin_2: row[16].clone(),
-            admin_3: row[17].clone(),
-            location: row[18].clone(),
+            event_type: row[Field::EventType as usize].clone().trim().to_string(),
+            actor_1: row[Field::Actor1 as usize].clone().trim().to_string(),
+            ally_actor_1: row[Field::AllyActor1 as usize].clone().trim().to_string(),
+            inter_1: row[Field::Inter1 as usize].clone().trim().to_string(),
+            actor_2: row[Field::Actor2 as usize].clone().trim().to_string(),
+            ally_actor_2: row[Field::AllyActor2 as usize].clone().trim().to_string(),
+            inter_2: row[Field::Inter2 as usize].clone().trim().to_string(),
+            interaction: row[Field::Interaction as usize].clone().trim().to_string(),
+            country: row[Field::Country as usize].clone().trim().to_string(),
+            admin_1: row[Field::Admin1 as usize].clone().trim().to_string(),
+            admin_2: row[Field::Admin2 as usize].clone().trim().to_string(),
+            admin_3: row[Field::Admin3 as usize].clone().trim().to_string(),
+            location: row[Field::Location as usize].clone().trim().to_string(),
             latitude: t_lat,
             longitude: t_lon,
             geo_precision: t_gpres,
-            source: row[22].clone(),
-            notes: row[23].clone(),
+            source: row[Field::Source as usize].clone().trim().to_string(),
+            notes: row[Field::Notes as usize].clone().trim().to_string(),
             fatalities: t_fat,
         }
     }
@@ -194,29 +194,29 @@ impl EventTrunc {
         }
     }
     pub fn from_csv_row(row: &Vec<String>) -> EventTrunc {
-        let date_str: String = row[3].parse::<String>().unwrap().trim().to_string();
+        let date_str: String = row[Field::EventDate as usize].parse::<String>().unwrap().trim().to_string();
         let t_date: NaiveDate = NaiveDate::parse_from_str(&date_str, "%d/%m/%Y").unwrap();
-        let t_year: i32 = row[4].parse::<i32>().unwrap();
-        let t_lat: f64 = row[19].parse::<f64>().unwrap();
-        let t_lon: f64 = row[20].parse::<f64>().unwrap();
-        let t_fat: i32 = row[24].parse::<i32>().unwrap();
+        let t_year: i32 = row[Field::Year as usize].parse::<i32>().unwrap();
+        let t_lat: f64 = row[Field::Latitude as usize].parse::<f64>().unwrap();
+        let t_lon: f64 = row[Field::Longitude as usize].parse::<f64>().unwrap();
+        let t_fat: i32 = row[Field::Fatalities as usize].parse::<i32>().unwrap();
         EventTrunc {
             event_date: t_date,
             year: t_year,
-            event_type: row[6].clone().trim().to_string(),
-            actor_1: row[7].clone().trim().to_string(),
-            ally_actor_1: row[8].clone().trim().to_string(),
-            actor_2: row[10].clone().trim().to_string(),
-            ally_actor_2: row[11].clone().trim().to_string(),
-            country: row[14].clone().trim().to_string(),
-            admin_1: row[15].clone().trim().to_string(),
-            admin_2: row[16].clone().trim().to_string(),
-            admin_3: row[17].clone().trim().to_string(),
-            location: row[18].clone().trim().to_string(),
+            event_type: row[Field::EventType as usize].clone().trim().to_string(),
+            actor_1: row[Field::Actor1 as usize].clone().trim().to_string(),
+            ally_actor_1: row[Field::AllyActor1 as usize].clone().trim().to_string(),
+            actor_2: row[Field::Actor2 as usize].clone().trim().to_string(),
+            ally_actor_2: row[Field::AllyActor2 as usize].clone().trim().to_string(),
+            country: row[Field::Country as usize].clone().trim().to_string(),
+            admin_1: row[Field::Admin1 as usize].clone().trim().to_string(),
+            admin_2: row[Field::Admin2 as usize].clone().trim().to_string(),
+            admin_3: row[Field::Admin3 as usize].clone().trim().to_string(),
+            location: row[Field::Location as usize].clone().trim().to_string(),
             latitude: t_lat,
             longitude: t_lon,
-            source: row[22].clone().trim().to_string(),
-            notes: row[23].clone().trim().to_string(),
+            source: row[Field::Source as usize].clone().trim().to_string(),
+            notes: row[Field::Notes as usize].clone().trim().to_string(),
             fatalities: t_fat,
         }
     }
