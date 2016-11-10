@@ -2,8 +2,8 @@ use std::collections::{HashMap, BTreeMap};
 use std::f64;
 
 use chrono::NaiveDate;
-
 use postgres::{Connection};
+use nickel::{Nickel, HttpRouter, Router};
 
 
 enum Field {
@@ -32,6 +32,28 @@ enum Field {
     Source,
     Notes,
     Fatalities,
+}
+
+pub struct AcledServer {
+    server: Nickel, 
+}
+
+impl AcledServer {
+    fn new() -> AcledServer {
+        AcledServer {
+            server: Nickel::new(),
+        }
+    }
+    fn start(&mut self) {
+        let data = self.main_page();
+        self.server.get("/", middleware! { |req, res| 
+            return res.render("views/main.tpl", &data);
+        });
+    }
+    fn main_page(&self) -> MainPageData {
+        let mpg = MainPageData { countries: Vec::new() };
+        mpg
+    }
 }
 
 #[derive(Debug, Clone, RustcDecodable, RustcEncodable)]

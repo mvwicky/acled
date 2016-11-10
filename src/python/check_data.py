@@ -8,6 +8,8 @@ if __name__ == '__main__':
     start = time.process_time()
 
     file_name = 'ACLED_Data'
+    if len(sys.argv) > 1:
+        file_name = sys.argv[1]
     clean_name = '{}_clean'.format(file_name)
     data_file = os.path.abspath(
         os.path.join('data', 'csv', '{}.csv'.format(file_name)))
