@@ -6,6 +6,7 @@ authors = ["Michael Van Wickle <vanwickle.m@husky.neu.edu>"]
 [dependencies]
 chrono = { version = "0.2", features = ["serde", "rustc-serialize"] }
 csv = "0.14.7"
+lazy_static = "0.2.2"
 nickel = "*"
-rustc-serialize = "0.3.19"
 postgres = { version = "0.12", features = ["with-chrono"] }
+rustc-serialize = "0.3.19"

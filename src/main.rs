@@ -8,16 +8,23 @@ extern crate postgres;
 
 
 use std::env;
-use std::collections::HashMap;
+// use std::collections::HashMap;
+use std::process::Command;
+// use std::path::{Path, PathBuf};
 
 use nickel::{Nickel, HttpRouter, Mountable, StaticFilesHandler};
 
-use acled::data_structs::{Event, EventTrunc, Country, CountryPageData, MainPageData,
+/*use acled::data_structs::{Event, EventTrunc, Country, CountryPageData, MainPageData,
+                          CountryNameLink};
+*/
+use acled::{Event, EventTrunc, Country, CountryPageData, MainPageData,
                           CountryNameLink};
 
 use postgres::{Connection, TlsMode};
-use postgres::types::ToSql;
+// use postgres::params::{UserInfo, ConnectParams, ConnectTarget};
+// use postgres::types::ToSql;
 
+// use acled::AcledServer;
 
 
 fn contains_name(inp_vec: &Vec<Country>, inp_name: String) -> bool {
@@ -62,6 +69,15 @@ fn get_country_by_link(inp_vec: &Vec<Country>, inp_link: String) -> Option<Count
 }
 
 fn main() {
+    /* Compile SASS (SCSS) to CSS */
+    println!("Compiling SASS");
+    let (styles_dir, main_scss, main_css) = ("styles", "main.scss", "main.css");
+    let sass_cmd = format!("{styles}/{scss}:{styles}/{css}", styles=styles_dir, scss=main_scss, css=main_css);
+    println!("{cmd}", cmd=sass_cmd);
+    Command::new("sass").arg(&sass_cmd).status().unwrap();
+
+    /* Make sure data file exists */
+
     let mut p = env::current_dir().unwrap();
     p.push("data");
     p.push("csv");
@@ -69,11 +85,28 @@ fn main() {
     println!("{}", p.display());
     println!("{}", p.is_file());
     if !p.is_file() {
-        println!("File does not exist! {}", p.display());
+        println!("File does not exist! ({})", p.display());
         std::process::exit(-1);
     }
+    else {
+        println!("File found! ({})", p.display());
+    }
+    /* Connect to acled db */
+    /*
+    println!("Opening database connection!");
+    let params = ConnectParams {
+        target:  ConnectTarget::Tcp("postgresql://localhost".to_owned()),
+        port: None,
+        user: Some(UserInfo {
+            user: "michael".to_owned(),
+            password: None,
+        }),
+        database: Some("acled".to_owned()),
+        options: vec![],
+    };
+    let conn = Connection::connect(params, TlsMode::None).unwrap();
+    */
     let conn = Connection::connect("postgresql://michael@localhost/acled", TlsMode::None).unwrap();
-
 
     conn.execute("DROP TABLE IF EXISTS event", &[]).unwrap();
     // conn.execute("DROP TABLE IF EXISTS event_trunc", &[]).unwrap();
@@ -133,13 +166,13 @@ fn main() {
         conn.prepare("SELECT * FROM event_trunc WHERE country = $1 AND year = $2").unwrap();
 
     let mut i = 0;
-    for ret_row in &get_event_trunc_country.query(&[&"Somalia"]).unwrap() {
+    for _ in &get_event_trunc_country.query(&[&"Somalia"]).unwrap() {
         i += 1;
     }
     println!("{}", i);
 
     let mut j = 0;
-    for ret_row in &get_event_trunc_country_year.query(&[&"Somalia", &2015]).unwrap() {
+    for _ in &get_event_trunc_country_year.query(&[&"Somalia", &2015]).unwrap() {
         j += 1;
     }
     println!("{}", j);
@@ -205,11 +238,9 @@ fn main() {
     server.mount("/dart/", StaticFilesHandler::new("src/dart"));
     server.mount("/js/", StaticFilesHandler::new("src/js"));
 
-    let c_vec = country_vec.clone();
     // Main Page
     let main_page = MainPageData { countries: country_nl_vec };
-    server.get("/",
-               middleware! { |request, response| 
+    server.get("/", middleware! { |request, response| 
         println!("{}", request.path_without_query().unwrap());
     	return response.render("views/main.tpl", &main_page);
     });

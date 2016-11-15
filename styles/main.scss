@@ -9,17 +9,51 @@ $dark-cell: rgb(180, 180, 220);
 $light-cell: rgb(210, 210, 225);
 
 
-* {
-    font-family: sans-serif;
+table {
+    background-color: transparent;
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+    border-spacing: 0;
+    th {
+        text-align: left;
+    }
+    thead>tr>th,
+    thead>tr>td {
+        background-color: $header-col;
+        border: 1px solid #ddd;
+        border-bottom: 2px solid #ddd;
+        border-bottom-width: 2px;
+        @include border-radius(2px);
+        line-height: 1.43;
+        padding: 8px;
+        vertical-align: bottom;
+    }
+    tbody>tr>th,
+    tbody>tr>td {
+        border: 1px solid #ddd;
+        border-top: 1px solid #ddd;
+        line-height: 1.43;
+        padding: 4px;
+        vertical-align: top;
+    }
+    thead:first-child>tr:first-child>th,
+    thead:first-child>tr:first-child>td {
+        border-top: 0;
+    }
+    tbody+tbody {
+        border-top: 2px solid #ddd;
+    }
+    tbody>tr:nth-child(odd)>td,
+    tbody>tr:nth-child(odd)>th {
+        background-color: $light-cell;
+    }
+    tbody>tr:nth-child(even)>td,
+    tbody>tr:nth-child(even)>th {
+        background-color: $dark-cell;
+    }
 }
 
-th {
-    background-color: $header-col;
-    border: 0.5px solid rgb(100, 100, 255);
-    @include border-radius(2px);
-    padding: 2px;
-}
-
+/*
 tr:nth-child(2n+1) {
     background-color: $light-cell;
 }
@@ -30,7 +64,8 @@ tr:nth-child(2n+0) {
 
 .acled-main {
     border: 1px solid black;
-} 
+} */
+
 
 body {
 	border: 1px solid rgba(0, 0, 0, 100);
@@ -39,6 +74,7 @@ body {
     vertical-align: center;
 }
 
+/*
 .map {
     border: 1px solid black;
     display: block;
@@ -53,4 +89,4 @@ table#indiv_ctry {
     th, td {
         border: 1px solid black;
     }
-}
+}*/

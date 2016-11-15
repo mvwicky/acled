@@ -1,24 +1,54 @@
-* {
-  font-family: sans-serif; }
+table {
+  background-color: transparent;
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+  border-spacing: 0; }
+  table th {
+    text-align: left; }
+  table thead > tr > th,
+  table thead > tr > td {
+    background-color: #9696e1;
+    border: 1px solid #ddd;
+    border-bottom: 2px solid #ddd;
+    border-bottom-width: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -ms-border-radius: 2px;
+    border-radius: 2px;
+    line-height: 1.43;
+    padding: 8px;
+    vertical-align: bottom; }
+  table tbody > tr > th,
+  table tbody > tr > td {
+    border: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    line-height: 1.43;
+    padding: 4px;
+    vertical-align: top; }
+  table thead:first-child > tr:first-child > th,
+  table thead:first-child > tr:first-child > td {
+    border-top: 0; }
+  table tbody + tbody {
+    border-top: 2px solid #ddd; }
+  table tbody > tr:nth-child(odd) > td,
+  table tbody > tr:nth-child(odd) > th {
+    background-color: #d2d2e1; }
+  table tbody > tr:nth-child(even) > td,
+  table tbody > tr:nth-child(even) > th {
+    background-color: #b4b4dc; }
 
-th {
-  background-color: #9696e1;
-  border: 0.5px solid #6464ff;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  -ms-border-radius: 2px;
-  border-radius: 2px;
-  padding: 2px; }
-
+/*
 tr:nth-child(2n+1) {
-  background-color: #d2d2e1; }
+    background-color: $light-cell;
+}
 
 tr:nth-child(2n+0) {
-  background-color: #b4b4dc; }
+    background-color: $dark-cell;
+}
 
 .acled-main {
-  border: 1px solid black; }
-
+    border: 1px solid black;
+} */
 body {
   border: 1px solid black;
   margin: 5px 5em;
@@ -27,17 +57,21 @@ body {
   /* vertical | horizontal */
   vertical-align: center; }
 
+/*
 .map {
-  border: 1px solid black;
-  display: block;
-  margin: auto;
-  width: 40%; }
+    border: 1px solid black;
+    display: block;
+    margin: auto;
+    width: 40%;
+}
 
 table#indiv_ctry {
-  font: 100% sans-serif;
-  border: 1px solid black;
-  background-color: #c8c8c8; }
-  table#indiv_ctry th, table#indiv_ctry td {
-    border: 1px solid black; }
+    font: 100% sans-serif;
+    border: 1px solid black;
+    background-color: rgb(200, 200, 200);
+    th, td {
+        border: 1px solid black;
+    }
+}*/
 
 /*# sourceMappingURL=main.css.map */
