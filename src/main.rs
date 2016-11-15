@@ -13,10 +13,11 @@ use std::process::Command;
 
 use nickel::{Nickel, HttpRouter, Mountable, StaticFilesHandler};
 
-use acled::{Event, EventTrunc, Country, CountryPageData, MainPageData, CountryNameLink};
+use acled::{AllCountries, Event, EventTrunc, Country, CountryPageData, MainPageData,
+            CountryNameLink};
 
 use postgres::{Connection, TlsMode};
-// use postgres::params::{UserInfo, ConnectParams, ConnectTarget};
+use postgres::params::{UserInfo, ConnectParams, ConnectTarget};
 // use postgres::types::ToSql;
 
 // use acled::AcledServer;
@@ -33,21 +34,6 @@ fn contains_name(inp_vec: &Vec<Country>, inp_name: String) -> bool {
             }
         }
         false
-    }
-}
-
-fn get_country_by_name(inp_vec: &Vec<Country>, inp_name: String) -> Option<Country> {
-    if inp_vec.is_empty() || inp_name.is_empty() {
-        None
-    }
-    else {
-        for elem in inp_vec {
-            if elem.name == inp_name {
-                let n_elem = elem.clone();
-                return Some(n_elem);
-            }
-        }
-        None
     }
 }
 
@@ -78,35 +64,34 @@ fn main() {
     Command::new("sass").arg(&sass_cmd).status().unwrap();
 
     // Make sure data file exists
-
     let mut p = env::current_dir().unwrap();
     p.push("data");
     p.push("csv");
     p.push("ACLED_Data_clean.csv");
-    println!("{}", p.display());
-    println!("{}", p.is_file());
     if !p.is_file() {
-        println!("File does not exist! ({})", p.display());
+        println!("File does not exist ({})", p.display());
         std::process::exit(-1);
     }
     else {
-        println!("File found! ({})", p.display());
+        println!("File found ({})", p.display());
     }
+
     // Connect to acled db
-    // println!("Opening database connection!");
-    // let params = ConnectParams {
-    // target:  ConnectTarget::Tcp("postgresql://localhost".to_owned()),
-    // port: None,
-    // user: Some(UserInfo {
-    // user: "michael".to_owned(),
-    // password: None,
-    // }),
-    // database: Some("acled".to_owned()),
-    // options: vec![],
-    // };
-    // let conn = Connection::connect(params, TlsMode::None).unwrap();
-    //
-    let conn = Connection::connect("postgresql://michael@localhost/acled", TlsMode::None).unwrap();
+    println!("Opening database connection");
+    let params = ConnectParams {
+        target: ConnectTarget::Tcp("localhost".to_owned()),
+        port: None,
+        user: Some(UserInfo {
+            user: "michael".to_owned(),
+            password: None,
+        }),
+        database: Some("acled".to_owned()),
+        options: vec![],
+    };
+    let conn = Connection::connect(params, TlsMode::None).unwrap();
+    println!("Connection opened");
+
+    // let conn = Connection::connect("postgresql://michael@localhost/acled", TlsMode::None).unwrap();
 
     conn.execute("DROP TABLE IF EXISTS event", &[]).unwrap();
     // conn.execute("DROP TABLE IF EXISTS event_trunc", &[]).unwrap();
@@ -134,24 +119,6 @@ fn main() {
                  &[])
         .unwrap();
 
-    let mut cur_rows: i64 = 0;
-    for cnt in &conn.query("SELECT count(*) from event_trunc", &[]).unwrap() {
-        cur_rows = cnt.get(0);
-    }
-
-    let mut rdr = csv::Reader::from_file(p.as_path()).unwrap();
-
-    println!("");
-
-
-    let country_index: usize = 14;
-    let fatality_index: usize = 24;
-
-    let mut country_nl_vec: Vec<CountryNameLink> = Vec::new();
-    let mut country_vec: Vec<Country> = Vec::new();
-    let mut tot_eve: i32 = 0;
-    let mut last_country: Option<String> = None;
-
     let add_event_trunc =
         conn.prepare("INSERT INTO event_trunc (event_date, year, event_type, \
                       actor_1,ally_actor_1, actor_2, ally_actor_2, country,admin_1, admin_2, \
@@ -165,49 +132,74 @@ fn main() {
     let get_event_trunc_country_year =
         conn.prepare("SELECT * FROM event_trunc WHERE country = $1 AND year = $2").unwrap();
 
-    let mut i = 0;
-    for _ in &get_event_trunc_country.query(&[&"Somalia"]).unwrap() {
-        i += 1;
-    }
-    println!("{}", i);
 
-    let mut j = 0;
-    for _ in &get_event_trunc_country_year.query(&[&"Somalia", &2015]).unwrap() {
-        j += 1;
+    conn.execute("CREATE TABLE IF NOT EXISTS ctry_pair (\
+        id   SERIAL PRIMARY KEY,\
+        name VARCHAR NOT NULL,\
+        link VARCHAR NOT NULL\
+        )",
+                 &[])
+        .unwrap();
+
+    let add_ctry_pair = conn.prepare("INSERT INTO ctry_pair (name, link) VALUES ($1, $2)").unwrap();
+    let get_all_ctry_pair = conn.prepare("SELECT * FROM  ctry_pair ORDER BY name").unwrap();
+
+    let mut cur_rows: i64 = 0;
+    for cnt in &conn.query("SELECT count(*) from event_trunc", &[]).unwrap() {
+        cur_rows = cnt.get(0);
     }
-    println!("{}", j);
+
+    let mut rdr = csv::Reader::from_file(p.as_path()).unwrap();
+
+    println!("");
+
+    let country_index: usize = 14;
+    let fatality_index: usize = 24;
+
+    let mut country_nl_vec: Vec<CountryNameLink> = Vec::new();
+    let mut country_vec: Vec<Country> = Vec::new();
+    let mut all_ctries = AllCountries::new();
+    let mut tot_eve: i32 = 0;
+    let mut last_country: Option<String> = None;
 
     let mut rows_aff = 0;
     for row in rdr.records() {
         tot_eve += 1;
         let row = row.unwrap();
 
-        let e_t = EventTrunc::from_csv_row(&row);
+        let cur_eve = EventTrunc::from_csv_row(&row);
         if cur_rows == 0 {
-            let r = add_event_trunc.execute(&[&e_t.event_date,
-                           &e_t.year,
-                           &e_t.event_type,
-                           &e_t.actor_1,
-                           &e_t.ally_actor_1,
-                           &e_t.actor_2,
-                           &e_t.ally_actor_2,
-                           &e_t.country,
-                           &e_t.admin_1,
-                           &e_t.admin_2,
-                           &e_t.admin_3,
-                           &e_t.location,
-                           &e_t.latitude,
-                           &e_t.longitude,
-                           &e_t.source,
-                           &e_t.notes,
-                           &e_t.fatalities])
+            let r = add_event_trunc.execute(&[&cur_eve.event_date,
+                           &cur_eve.year,
+                           &cur_eve.event_type,
+                           &cur_eve.actor_1,
+                           &cur_eve.ally_actor_1,
+                           &cur_eve.actor_2,
+                           &cur_eve.ally_actor_2,
+                           &cur_eve.country,
+                           &cur_eve.admin_1,
+                           &cur_eve.admin_2,
+                           &cur_eve.admin_3,
+                           &cur_eve.location,
+                           &cur_eve.latitude,
+                           &cur_eve.longitude,
+                           &cur_eve.source,
+                           &cur_eve.notes,
+                           &cur_eve.fatalities])
                 .unwrap();
             rows_aff += r;
             println!("{}", rows_aff);
         }
 
-        let fatalities = row[fatality_index].parse::<i32>().unwrap();
         let country = row[country_index].parse::<String>().unwrap();
+        let fatalities = row[fatality_index].parse::<i32>().unwrap();
+
+        all_ctries.push_new_if_not(country.clone());
+
+        let ac_ind = all_ctries.countries.len() - 1;
+        all_ctries.countries[ac_ind].num_events += 1;
+        all_ctries.countries[ac_ind].num_fatalities += fatalities;
+        all_ctries.countries[ac_ind].events.push(Event::from_row(&row));
 
         if country_vec.is_empty() || last_country.is_none() {
             country_nl_vec.push(CountryNameLink::new(country.clone()));
@@ -226,10 +218,24 @@ fn main() {
         let ind = country_vec.len() - 1;
         country_vec[ind].num_events += 1;
         country_vec[ind].num_fatalities += fatalities;
-        country_vec[ind].events.push(Event::from_csv_row(&row));
+        country_vec[ind].events.push(Event::from_row(&row));
     }
     println!("Rows Affected: {}", rows_aff);
     println!("Total Events: {}", tot_eve);
+
+    for elem in &all_ctries.countries {
+        println!("{}, {}", elem.name, elem.num_events);
+    }
+
+    let mut cur_rows: i64 = 0;
+    for cnt in &conn.query("SELECT count(*) from ctry_pair", &[]).unwrap() {
+        cur_rows = cnt.get(0);
+    }
+    if cur_rows == 0 {
+        for elem in country_nl_vec.clone() {
+            let _ = add_ctry_pair.execute(&[&elem.name, &elem.link]).unwrap();
+        }
+    }
 
     let mut server = Nickel::new();
 
@@ -255,6 +261,7 @@ fn main() {
             let c_struct = CountryPageData {
                 found: false,
                 name: "Not Found".to_string(),
+                link: "NotFound".to_string(),
                 years: Vec::new(),
             };
             return response.render("views/country.tpl", &c_struct);
@@ -275,7 +282,7 @@ fn main() {
     // server.get("/country/:country_link/:year", middleware!{|request, response|
     //
     // });
-    //
+
 
     server.listen("127.0.0.1:6767");
 }

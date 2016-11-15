@@ -21,6 +21,7 @@ pub mod acled_server;
 
 pub use acled_server::AcledServer;
 
+pub use data_structs::all_countries::AllCountries;
 pub use data_structs::field::Field;
 pub use data_structs::event::Event;
 pub use data_structs::event_trunc::EventTrunc;

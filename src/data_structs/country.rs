@@ -1,6 +1,3 @@
-// Country: contains full country data
-//
-
 use std::collections::BTreeMap;
 use std::f64;
 
@@ -8,6 +5,7 @@ use super::country_page_data::CountryPageData;
 use super::event::Event;
 use super::year::Year;
 
+/// `Country` contains full country data
 #[derive(Debug, Clone, RustcEncodable)]
 pub struct Country {
     pub events: Vec<Event>,
@@ -25,6 +23,16 @@ impl Country {
             name: t_name,
             num_events: num_eve,
             num_fatalities: num_fat,
+        }
+    }
+    /// Create a blank `Country` from just the name
+    pub fn from_name(t_name: String) -> Country {
+        Country {
+            events: Vec::new(),
+            link: t_name.clone().replace(" ", ""),
+            name: t_name, 
+            num_events: 0i32,
+            num_fatalities: 0i32, 
         }
     }
     pub fn to_page_data(&self) -> CountryPageData {
@@ -52,6 +60,7 @@ impl Country {
         CountryPageData {
             found: true,
             name: self.name.clone(),
+            link: self.link.clone(),
             years: t_vec,
         }
 

@@ -1,10 +1,9 @@
-// Event struct: contains a row
-//
-
 use chrono::NaiveDate;
 
 use super::field::Field;
 
+/// `Event`
+/// contains a csv row, to be inserted into db
 #[derive(Debug, Clone, RustcDecodable, RustcEncodable)]
 pub struct Event {
     pub gwno: String,
@@ -35,7 +34,7 @@ pub struct Event {
 }
 
 impl Event {
-    pub fn from_csv_row(row: &Vec<String>) -> Event {
+    pub fn from_row(row: &Vec<String>) -> Event {
         let date_str: String =
             row[Field::EventDate as usize].parse::<String>().unwrap().trim().to_string();
         let t_date: NaiveDate = NaiveDate::parse_from_str(&date_str, "%d/%m/%Y").unwrap();

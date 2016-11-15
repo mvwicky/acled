@@ -24,7 +24,7 @@
             <tbody>
                 {{#years}}
                 <tr>
-                    <td><a href="/{{year}}">{{ year }}</a></td>
+                    <td><a href="/year/{{ link }}/{{year}}">{{ year }}</a></td>
                     <td>{{ events }}</td>
                     <td>{{ fatalities }}</td>
                     <td>{{ epd }}</td>

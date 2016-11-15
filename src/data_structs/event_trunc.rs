@@ -1,11 +1,10 @@
-// EventTrunc: contains some fields from a row
-//
-
 use chrono::NaiveDate;
 
 use super::field::Field;
 use super::event::Event;
 
+/// `EventTrunc`
+///  contains certain fields from a row
 #[derive(Debug, Clone, RustcEncodable)]
 pub struct EventTrunc {
     pub event_date: NaiveDate,

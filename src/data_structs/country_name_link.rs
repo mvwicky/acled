@@ -1,6 +1,4 @@
-// CountryNameLink: hold the name and link to a country
-//
-
+/// CountryNameLink: hold the name and link to a country
 #[derive(Debug, Clone, RustcEncodable)]
 pub struct CountryNameLink {
     pub name: String,
