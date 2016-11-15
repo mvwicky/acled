@@ -1,6 +1,5 @@
-/*
-    Event struct: contains a row
-*/
+// Event struct: contains a row
+//
 
 use chrono::NaiveDate;
 
@@ -37,7 +36,8 @@ pub struct Event {
 
 impl Event {
     pub fn from_csv_row(row: &Vec<String>) -> Event {
-        let date_str: String = row[Field::EventDate as usize].parse::<String>().unwrap().trim().to_string();
+        let date_str: String =
+            row[Field::EventDate as usize].parse::<String>().unwrap().trim().to_string();
         let t_date: NaiveDate = NaiveDate::parse_from_str(&date_str, "%d/%m/%Y").unwrap();
         let t_year: i32 = row[Field::Year as usize].parse::<i32>().unwrap();
         let t_tpres: i32 = row[Field::TimePrecision as usize].parse::<i32>().unwrap();

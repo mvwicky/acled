@@ -1,5 +1,6 @@
-// EventTrunc: contains some fields from a row
-//
+/*
+	EventTrunc: contains some fields from a row
+*/
 
 use chrono::NaiveDate;
 
@@ -50,8 +51,7 @@ impl EventTrunc {
         }
     }
     pub fn from_csv_row(row: &Vec<String>) -> EventTrunc {
-        let date_str: String =
-            row[Field::EventDate as usize].parse::<String>().unwrap().trim().to_string();
+        let date_str: String = row[Field::EventDate as usize].parse::<String>().unwrap().trim().to_string();
         let t_date: NaiveDate = NaiveDate::parse_from_str(&date_str, "%d/%m/%Y").unwrap();
         let t_year: i32 = row[Field::Year as usize].parse::<i32>().unwrap();
         let t_lat: f64 = row[Field::Latitude as usize].parse::<f64>().unwrap();

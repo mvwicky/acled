@@ -1,5 +1,6 @@
-// MainPageData: contains data sent to main page
-//
+/*
+	MainPageData: contains data sent to main page
+*/
 
 use super::country_name_link::CountryNameLink;
 

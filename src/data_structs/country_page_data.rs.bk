@@ -1,5 +1,6 @@
-// CountryPageData: data actually sent to page
-//
+/*
+	CountryPageData: data actually sent to page
+*/
 
 use super::country::Country;
 use super::year::Year;
@@ -20,6 +21,6 @@ impl CountryPageData {
         }
     }
     pub fn from_country(ctry: Country) -> CountryPageData {
-        CountryPageData::new(ctry.name)
+    	CountryPageData::new(ctry.name)
     }
 }

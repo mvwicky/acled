@@ -1,5 +1,6 @@
-// Country: contains full country data
-//
+/*
+	Country: contains full country data 
+*/
 
 use std::collections::BTreeMap;
 use std::f64;

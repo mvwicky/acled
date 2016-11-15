@@ -25,8 +25,7 @@ use postgres::{Connection, TlsMode};
 fn contains_name(inp_vec: &Vec<Country>, inp_name: String) -> bool {
     if inp_vec.is_empty() || inp_name.is_empty() {
         false
-    }
-    else {
+    } else {
         for elem in inp_vec {
             if elem.name == inp_name {
                 return true;
@@ -39,8 +38,7 @@ fn contains_name(inp_vec: &Vec<Country>, inp_name: String) -> bool {
 fn get_country_by_name(inp_vec: &Vec<Country>, inp_name: String) -> Option<Country> {
     if inp_vec.is_empty() || inp_name.is_empty() {
         None
-    }
-    else {
+    } else {
         for elem in inp_vec {
             if elem.name == inp_name {
                 let n_elem = elem.clone();
@@ -54,8 +52,7 @@ fn get_country_by_name(inp_vec: &Vec<Country>, inp_name: String) -> Option<Count
 fn get_country_by_link(inp_vec: &Vec<Country>, inp_link: String) -> Option<Country> {
     if inp_vec.is_empty() || inp_link.is_empty() {
         None
-    }
-    else {
+    } else {
         for elem in inp_vec {
             if elem.link == inp_link {
                 let n_elem = elem.clone();
@@ -88,8 +85,7 @@ fn main() {
     if !p.is_file() {
         println!("File does not exist! ({})", p.display());
         std::process::exit(-1);
-    }
-    else {
+    } else {
         println!("File found! ({})", p.display());
     }
     // Connect to acled db

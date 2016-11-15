@@ -25,18 +25,20 @@ impl AcledServer {
         }
     }
     pub fn init(&mut self) {
-        // compile sass
+        /* compile sass  */
         println!("Compiling SASS");
     }
     pub fn start(&mut self) {
-        self.server.get("/",
-                        middleware! { |request, response |
+        self.server.get("/", middleware! { |request, response |
             let data: Vec<i32> = Vec::new();
             println!("{}", request.path_without_query().unwrap());
             return response.render("views/main.tpl", &data);
         });
     }
     fn main_page(&self) -> MainPageData {
-        MainPageData { countries: Vec::new() }
+        MainPageData { 
+            countries: Vec::new(),
+        }
     }
 }
+

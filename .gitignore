@@ -6,6 +6,8 @@
 # More information here http://doc.crates.io/guide.html#cargotoml-vs-cargolock
 Cargo.lock
 
+*.rs.bak
+
 # sass
 .sass-cache/
 *.css.map
@@ -33,4 +35,3 @@ doc/api/
 
 pubspec.lock
 
-*.bak

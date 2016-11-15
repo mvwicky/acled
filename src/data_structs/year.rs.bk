@@ -1,5 +1,6 @@
-// Year: contains year stats (country indep.)
-//
+/*
+    Year: contains year stats (country indep.)
+*/
 
 #[derive(Debug, Clone, RustcEncodable)]
 pub struct Year {
