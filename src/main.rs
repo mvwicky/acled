@@ -91,6 +91,7 @@ fn main() {
     if rebuild_db {
         conn.execute("DROP TABLE IF EXISTS event", &[]).unwrap();
         conn.execute("DROP TABLE IF EXISTS event_trunc", &[]).unwrap();
+        conn.execute("DROP TABLE IF EXISTS ctry_pair", &[]).unwrap();
     }
 
     conn.execute("CREATE TABLE IF NOT EXISTS event_trunc (\
@@ -147,8 +148,12 @@ fn main() {
         .unwrap();
 
     let mut cur_rows: i64 = 0;
-    for cnt in &conn.query("SELECT count(*) from event_trunc", &[]).unwrap() {
+    for cnt in &conn.query("SELECT count(*) FROM event_trunc", &[]).unwrap() {
         cur_rows = cnt.get(0);
+    }
+    let mut pair_rows = 0;
+    for cnt in &conn.query("SELECT count(*) FROM event_trunc", &[]).unwrap() {
+        pair_rows = cnt.get(0);
     }
 
     let mut rdr = csv::Reader::from_file(p.as_path()).unwrap();
@@ -201,6 +206,17 @@ fn main() {
     }
     println!("Rows Affected: {}", rows_aff);
     println!("Total Events: {}", tot_eve);
+
+    if pair_rows == 0 {
+        let mut nl_vec_temp: Vec<CountryNameLink> = Vec::new();
+        for elem in &all_ctries.countries {
+            let temp_ctry = elem.clone();
+            nl_vec_temp.push(CountryNameLink::new(temp_ctry.name));
+        }
+        for elem in &nl_vec_temp {
+            let _ = add_ctry_pair.execute(&[&elem.name, &elem.link]);
+        }
+    }
 
     let mut nl_vec: Vec<CountryNameLink> = Vec::new();
     for elem in &get_all_ctry_pair.query(&[]).unwrap() {
