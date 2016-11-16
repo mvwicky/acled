@@ -26,6 +26,19 @@ pub struct EventTrunc {
     pub fatalities: i32,
 }
 
+/// `EventTruncRenderable`
+/// has a string based date
+/// only sends the attributes on the year page
+#[derive(Debug, Clone, RustcEncodable)]
+pub struct EventTruncRenderable {
+    pub event_date: String,
+    pub event_type: String,
+    pub actor_1: String,
+    pub actor_2: String,
+    pub location: String,
+    pub fatalities: i32,
+}
+
 impl EventTrunc {
     pub fn from_event(event: &Event) -> EventTrunc {
         EventTrunc {
@@ -73,6 +86,49 @@ impl EventTrunc {
             longitude: t_lon,
             source: row[Field::Source as usize].clone().trim().to_string(),
             notes: row[Field::Notes as usize].clone().trim().to_string(),
+            fatalities: t_fat,
+        }
+    }
+    pub fn to_renderable(&self) -> EventTruncRenderable {
+        unimplemented!()
+    }
+}
+
+impl EventTruncRenderable {
+    pub fn from_event(event: &Event) -> EventTruncRenderable {
+        let date_str: String = event.event_date.clone().format("%m-%d").to_string();
+        EventTruncRenderable {
+            event_date: date_str,
+            event_type: event.event_type.clone(),
+            actor_1: event.actor_1.clone(),
+            actor_2: event.actor_2.clone(),
+            location: event.location.clone(),
+            fatalities: event.fatalities.clone(),
+        }
+    }
+    pub fn from_event_trunc(event_tr: &EventTrunc) -> EventTruncRenderable {
+        let date_str: String = event_tr.event_date.clone().format("%m-%d").to_string();
+        EventTruncRenderable {
+            event_date: date_str,
+            event_type: event_tr.event_type.clone(),
+            actor_1: event_tr.actor_1.clone(),
+            actor_2: event_tr.actor_2.clone(),
+            location: event_tr.location.clone(),
+            fatalities: event_tr.fatalities.clone(),
+        }
+    }
+    pub fn from_csv_row(row: &Vec<String>) -> EventTruncRenderable {
+        let date_str: String =
+            row[Field::EventDate as usize].parse::<String>().unwrap().trim().to_string();
+        let t_date: NaiveDate = NaiveDate::parse_from_str(&date_str, "%d/%m/%Y").unwrap();
+        let date_str: String = t_date.format("%m-%d").to_string();
+        let t_fat: i32 = row[Field::Fatalities as usize].parse::<i32>().unwrap();
+        EventTruncRenderable {
+            event_date: date_str,
+            event_type: row[Field::EventType as usize].clone().trim().to_string(),
+            actor_1: row[Field::Actor1 as usize].clone().trim().to_string(),
+            actor_2: row[Field::Actor2 as usize].clone().trim().to_string(),
+            location: row[Field::Location as usize].clone().trim().to_string(),
             fatalities: t_fat,
         }
     }

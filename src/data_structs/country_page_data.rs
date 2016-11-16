@@ -1,7 +1,7 @@
 use super::country::Country;
 use super::year::Year;
 
-/// `CountryPageData` 
+/// `CountryPageData`
 /// data actually sent to page
 #[derive(Debug, Clone, RustcEncodable)]
 pub struct CountryPageData {

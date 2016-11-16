@@ -10,9 +10,7 @@ pub struct AllCountries {
 
 impl AllCountries {
     pub fn new() -> AllCountries {
-        AllCountries {
-        	countries: Vec::new(),
-        }
+        AllCountries { countries: Vec::new() }
     }
     pub fn push(&mut self, inp_ctry: Country) {
         self.countries.push(inp_ctry);
@@ -39,19 +37,19 @@ impl AllCountries {
     /// creates a new `Country` from the input name
     /// returns `true` if not added, `true` otherwise
     pub fn push_new_if_not(&mut self, inp_name: String) -> bool {
-    	if self.countries.is_empty() {
-    		self.push(Country::from_name(inp_name));
-    		true
-    	}
-    	else {
-    		for elem in &self.countries {
-    			if elem.name == inp_name {
-    				return false;
-    			}
-    		}
-    		self.push(Country::from_name(inp_name));
-    		true
-    	}
+        if self.countries.is_empty() {
+            self.push(Country::from_name(inp_name));
+            true
+        }
+        else {
+            for elem in &self.countries {
+                if elem.name == inp_name {
+                    return false;
+                }
+            }
+            self.push(Country::from_name(inp_name));
+            true
+        }
     }
     pub fn contains_name(&self, inp_name: String) -> bool {
         if self.countries.is_empty() || inp_name.is_empty() {

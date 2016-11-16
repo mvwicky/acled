@@ -3,7 +3,9 @@ use std::f64;
 
 use super::country_page_data::CountryPageData;
 use super::event::Event;
+use super::event_trunc::{EventTrunc, EventTruncRenderable};
 use super::year::Year;
+use super::year_page_data::YearPageData;
 
 /// `Country` contains full country data
 #[derive(Debug, Clone, RustcEncodable)]
@@ -30,9 +32,9 @@ impl Country {
         Country {
             events: Vec::new(),
             link: t_name.clone().replace(" ", ""),
-            name: t_name, 
+            name: t_name,
             num_events: 0i32,
-            num_fatalities: 0i32, 
+            num_fatalities: 0i32,
         }
     }
     pub fn to_page_data(&self) -> CountryPageData {
@@ -61,8 +63,21 @@ impl Country {
             found: true,
             name: self.name.clone(),
             link: self.link.clone(),
+            total_eve: t_vec.len() as i32,
             years: t_vec,
         }
-
+    }
+    pub fn to_year_data(&self, inp_year: i32) -> YearPageData {
+        let mut t_eve: Vec<EventTruncRenderable> = Vec::new();
+        for elem in &self.events {
+            if elem.year == inp_year {
+                t_eve.push(EventTruncRenderable::from_event(elem));
+            }
+        }
+        YearPageData {
+            eve_vec: t_eve,
+            name: self.name.clone(),
+            year: inp_year,
+        }
     }
 }

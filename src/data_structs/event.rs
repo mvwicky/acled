@@ -47,7 +47,10 @@ impl Event {
         Event {
             gwno: row[Field::Gwno as usize].clone().trim().to_string(),
             event_id_cnty: row[Field::EventIdCnty as usize].clone().trim().to_string(),
-            event_id_no_cnty: row[Field::EventIdNoCnty as usize].clone().trim().to_string(),
+            event_id_no_cnty: row[Field::EventIdNoCnty as usize]
+                .clone()
+                .trim()
+                .to_string(),
             event_date: t_date,
             year: t_year,
             time_precision: t_tpres,

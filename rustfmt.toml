@@ -1,2 +1,4 @@
 else_if_brace_style = "ClosingNextLine"
 write_mode = "Replace"
+verbose = true
+max_width = 90

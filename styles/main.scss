@@ -1,13 +1,25 @@
 @import "base";
 
 $verti: 5px;
-$horiz: 5em;
+$horiz: 2em;
 $ncols: 2;
 
 $header-col: rgb(150, 150, 225);
 $dark-cell: rgb(180, 180, 220);
 $light-cell: rgb(210, 210, 225);
 
+body {
+    border: 1px solid rgba(0, 0, 0, 100);
+    margin: $verti $horiz;
+    /* vertical | horizontal */
+    padding: 1.0em 1.0em;
+    /* vertical | horizontal */
+    vertical-align: center;
+}
+
+#stats {
+    font-size: 12pt;
+}
 
 table {
     background-color: transparent;
@@ -52,41 +64,3 @@ table {
         background-color: $dark-cell;
     }
 }
-
-/*
-tr:nth-child(2n+1) {
-    background-color: $light-cell;
-}
-
-tr:nth-child(2n+0) {
-    background-color: $dark-cell;
-}
-
-.acled-main {
-    border: 1px solid black;
-} */
-
-
-body {
-	border: 1px solid rgba(0, 0, 0, 100);
-	margin: $verti $horiz; /* vertical | horizontal */
-	padding: 1.0em 1.0em; /* vertical | horizontal */
-    vertical-align: center;
-}
-
-/*
-.map {
-    border: 1px solid black;
-    display: block;
-    margin: auto;
-    width: 40%;
-}
-
-table#indiv_ctry {
-    font: 100% sans-serif;
-    border: 1px solid black;
-    background-color: rgb(200, 200, 200);
-    th, td {
-        border: 1px solid black;
-    }
-}*/

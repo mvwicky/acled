@@ -1,3 +1,14 @@
+body {
+  border: 1px solid black;
+  margin: 5px 2em;
+  /* vertical | horizontal */
+  padding: 1.0em 1.0em;
+  /* vertical | horizontal */
+  vertical-align: center; }
+
+#stats {
+  font-size: 12pt; }
+
 table {
   background-color: transparent;
   border: 1px solid #ddd;
@@ -36,42 +47,5 @@ table {
   table tbody > tr:nth-child(even) > td,
   table tbody > tr:nth-child(even) > th {
     background-color: #b4b4dc; }
-
-/*
-tr:nth-child(2n+1) {
-    background-color: $light-cell;
-}
-
-tr:nth-child(2n+0) {
-    background-color: $dark-cell;
-}
-
-.acled-main {
-    border: 1px solid black;
-} */
-body {
-  border: 1px solid black;
-  margin: 5px 5em;
-  /* vertical | horizontal */
-  padding: 1.0em 1.0em;
-  /* vertical | horizontal */
-  vertical-align: center; }
-
-/*
-.map {
-    border: 1px solid black;
-    display: block;
-    margin: auto;
-    width: 40%;
-}
-
-table#indiv_ctry {
-    font: 100% sans-serif;
-    border: 1px solid black;
-    background-color: rgb(200, 200, 200);
-    th, td {
-        border: 1px solid black;
-    }
-}*/
 
 /*# sourceMappingURL=main.css.map */

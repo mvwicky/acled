@@ -12,25 +12,25 @@
             <table id="stats">
                 <thead>
                     <tr>
-                        <th>Events</th>
+                        <th>Date</th>
+                        <th>Type</th>
                         <th>Fatalities</th>
-                        <th>Events/Day</th>
-                        <th>Fatalities/Event</th>
-                        <th>Most Common Actor</th>
-                        <th>Most Common Event Type</th>
+                        <th>Actor 1</th>
+                        <th>Actor 2</th>
+                        <th>Location</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{#years}}
+                    {{#eve_vec}}
                         <tr>
-                            <td>{{year}}</td>
-                            <td>{{fat}}</td>
-                            <td>{{epd}}</td>
-                            <td>{{fpe}}</td>
-                            <td>{{mca}}</td>
-                            <td>{{mce}}</td>
+                            <td>{{ event_date }}</td>
+                            <td>{{ event_type }}</td>
+                            <td>{{ fatalities }}</td>
+                            <td>{{ actor_1 }}</td>
+                            <td>{{ actor_2 }}</td>
+                            <td>{{ location }}</td>
                         </tr>
-                    {{/years}}
+                    {{/eve_vec}}
                 </tbody>
             </table>
             <br />
